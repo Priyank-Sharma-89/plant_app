@@ -3,8 +3,8 @@ import 'package:plant_app/screens/details/details_screen.dart';
 
 import '../../../constants.dart';
 
-class RecomendsPlants extends StatelessWidget {
-  const RecomendsPlants({
+class RecommendedPlants extends StatelessWidget {
+  const RecommendedPlants({
     Key key,
   }) : super(key: key);
 
@@ -14,40 +14,23 @@ class RecomendsPlants extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: <Widget>[
-          RecomendPlantCard(
+          RecommendedPlantCard(
             image: "assets/images/image_1.png",
             title: "Samantha",
             country: "Russia",
             price: 440,
-            press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailsScreen(),
-                ),
-              );
-            },
           ),
-          RecomendPlantCard(
+          RecommendedPlantCard(
             image: "assets/images/image_2.png",
             title: "Angelica",
             country: "Russia",
             price: 440,
-            press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailsScreen(),
-                ),
-              );
-            },
           ),
-          RecomendPlantCard(
+          RecommendedPlantCard(
             image: "assets/images/image_3.png",
             title: "Samantha",
             country: "Russia",
             price: 440,
-            press: () {},
           ),
         ],
       ),
@@ -55,8 +38,8 @@ class RecomendsPlants extends StatelessWidget {
   }
 }
 
-class RecomendPlantCard extends StatelessWidget {
-  const RecomendPlantCard({
+class RecommendedPlantCard extends StatelessWidget {
+  const RecommendedPlantCard({
     Key key,
     this.image,
     this.title,
@@ -66,11 +49,12 @@ class RecomendPlantCard extends StatelessWidget {
   }) : super(key: key);
 
   final String image, title, country;
-  final int price;
+  final double price;
   final Function press;
 
   @override
   Widget build(BuildContext context) {
+    TextTheme getTheme = Theme.of(context).textTheme;
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(
@@ -79,12 +63,24 @@ class RecomendPlantCard extends StatelessWidget {
         bottom: kDefaultPadding * 2.5,
       ),
       width: size.width * 0.4,
-      child: Column(
-        children: <Widget>[
-          Image.asset(image),
-          GestureDetector(
-            onTap: press,
-            child: Container(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailsScreen(
+                plantImg: image,
+                plantName: title,
+                plantCountry: country,
+                plantPrice: price,
+              ),
+            ),
+          );
+        },
+        child: Column(
+          children: <Widget>[
+            Image.asset(image),
+            Container(
               padding: EdgeInsets.all(kDefaultPadding / 2),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -107,7 +103,7 @@ class RecomendPlantCard extends StatelessWidget {
                       children: [
                         TextSpan(
                             text: "$title\n".toUpperCase(),
-                            style: Theme.of(context).textTheme.button),
+                            style: getTheme.button),
                         TextSpan(
                           text: "$country".toUpperCase(),
                           style: TextStyle(
@@ -120,16 +116,13 @@ class RecomendPlantCard extends StatelessWidget {
                   Spacer(),
                   Text(
                     '\$$price',
-                    style: Theme.of(context)
-                        .textTheme
-                        .button
-                        .copyWith(color: kPrimaryColor),
+                    style: getTheme.button.copyWith(color: kPrimaryColor),
                   )
                 ],
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
